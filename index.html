@@ -2,91 +2,129 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>4-Level Dice Math Trainer</title>
+<title>Dice Math Trainer (Clean UI)</title>
 
 <style>
 body {
     font-family: Arial;
     text-align: center;
-    background: #e8f5e9;
+    background: #cfe8ff; /* pastel blue */
 }
 
 .section {
     background: white;
     margin: 20px auto;
-    padding: 15px;
+    padding: 18px;
     width: 75%;
-    border-radius: 12px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    border-radius: 14px;
+    box-shadow: 0 0 12px rgba(0,0,0,0.15);
 }
 
-.dice img {
+.dice-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin: 10px 0;
+}
+
+.dice-row img {
     width: 70px;
 }
 
+.symbol {
+    font-size: 28px;
+    font-weight: bold;
+}
+
 button {
-    margin: 5px;
+    margin: 6px;
     padding: 8px 12px;
+    cursor: pointer;
+}
+
+h2 {
+    margin-bottom: 5px;
 }
 </style>
 </head>
 
 <body>
 
-<h1>🎲 4-Level Dice Math Trainer</h1>
+<h1>🎲 Dice Math Trainer</h1>
 
 <!-- ================= SECTION 1 ================= -->
 <div class="section">
-<h2>1️⃣ A + B = C</h2>
+<h2>➕ Addition</h2>
 
-<div class="dice">
-<img id="a1"><img id="a2">
+<div class="dice-row">
+<img id="a1">
+<div class="symbol">+</div>
+<img id="a2">
 </div>
 
-<input id="ans1" placeholder="A + B">
+<input id="ans1" placeholder="Answer">
+<br>
 <button onclick="check1()">Submit</button>
+<button onclick="roll1()">Reroll 🔁</button>
 
 <p id="r1"></p>
 </div>
 
 <!-- ================= SECTION 2 ================= -->
 <div class="section">
-<h2>2️⃣ (A + B) + C = D</h2>
+<h2>➕➕ Multi Addition</h2>
 
-<div class="dice">
-<img id="b1"><img id="b2"><img id="b3">
+<div class="dice-row">
+<img id="b1">
+<div class="symbol">+</div>
+<img id="b2">
+<div class="symbol">+</div>
+<img id="b3">
 </div>
 
-<input id="ans2" placeholder="(A+B)+C">
+<input id="ans2" placeholder="Answer">
+<br>
 <button onclick="check2()">Submit</button>
+<button onclick="roll2()">Reroll 🔁</button>
 
 <p id="r2"></p>
 </div>
 
 <!-- ================= SECTION 3 ================= -->
 <div class="section">
-<h2>3️⃣ A - B = C (A ≥ B rule)</h2>
+<h2>➖ Subtraction</h2>
 
-<div class="dice">
-<img id="c1"><img id="c2">
+<div class="dice-row">
+<img id="c1">
+<div class="symbol">−</div>
+<img id="c2">
 </div>
 
-<input id="ans3" placeholder="A - B">
+<input id="ans3" placeholder="Answer">
+<br>
 <button onclick="check3()">Submit</button>
+<button onclick="roll3()">Reroll 🔁</button>
 
 <p id="r3"></p>
 </div>
 
 <!-- ================= SECTION 4 ================= -->
 <div class="section">
-<h2>4️⃣ (A + B) - C = D</h2>
+<h2>➕➖ Mixed (A + B − C)</h2>
 
-<div class="dice">
-<img id="d1"><img id="d2"><img id="d3">
+<div class="dice-row">
+<img id="d1">
+<div class="symbol">+</div>
+<img id="d2">
+<div class="symbol">−</div>
+<img id="d3">
 </div>
 
-<input id="ans4" placeholder="(A+B)-C">
+<input id="ans4" placeholder="Answer">
+<br>
 <button onclick="check4()">Submit</button>
+<button onclick="roll4()">Reroll 🔁</button>
 
 <p id="r4"></p>
 </div>
@@ -120,9 +158,7 @@ function check1(){
     let correct=a1+a2;
 
     document.getElementById("r1").innerText =
-        (ans===correct)?"✅ Correct!":"❌ Try again";
-
-    roll1();
+        (ans===correct) ? "✅ Correct!" : "❌ Try again";
 }
 
 /* ================= SECTION 2 ================= */
@@ -138,12 +174,10 @@ function roll2(){
 
 function check2(){
     let ans=Number(document.getElementById("ans2").value);
-    let correct=(b1+b2)+b3;
+    let correct=b1+b2+b3;
 
     document.getElementById("r2").innerText =
-        (ans===correct)?"✅ Correct!":"❌ Try again";
-
-    roll2();
+        (ans===correct) ? "✅ Correct!" : "❌ Try again";
 }
 
 /* ================= SECTION 3 ================= */
@@ -153,7 +187,7 @@ function roll3(){
     do{
         c1=rand();
         c2=rand();
-    }while(c1 < c2); // RULE: A ≥ B
+    }while(c1 < c2); // prevent negatives
 
     document.getElementById("c1").src=diceImg[c1];
     document.getElementById("c2").src=diceImg[c2];
@@ -164,9 +198,7 @@ function check3(){
     let correct=c1-c2;
 
     document.getElementById("r3").innerText =
-        (ans===correct)?"✅ Correct!":"❌ Try again";
-
-    roll3();
+        (ans===correct) ? "✅ Correct!" : "❌ Try again";
 }
 
 /* ================= SECTION 4 ================= */
@@ -177,7 +209,7 @@ function roll4(){
         d1=rand();
         d2=rand();
         d3=rand();
-    }while((d1+d2)<d3); // RULE: A+B ≥ C
+    }while((d1+d2) < d3); // valid subtraction
 
     document.getElementById("d1").src=diceImg[d1];
     document.getElementById("d2").src=diceImg[d2];
@@ -189,9 +221,7 @@ function check4(){
     let correct=(d1+d2)-d3;
 
     document.getElementById("r4").innerText =
-        (ans===correct)?"✅ Correct!":"❌ Try again";
-
-    roll4();
+        (ans===correct) ? "✅ Correct!" : "❌ Try again";
 }
 
 /* INIT */
