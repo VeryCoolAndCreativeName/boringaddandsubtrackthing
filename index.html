@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>4-Level Dice Math Trainer</title>
+
+<style>
+body {
+    font-family: Arial;
+    text-align: center;
+    background: #e8f5e9;
+}
+
+.section {
+    background: white;
+    margin: 20px auto;
+    padding: 15px;
+    width: 75%;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+}
+
+.dice img {
+    width: 70px;
+}
+
+button {
+    margin: 5px;
+    padding: 8px 12px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>🎲 4-Level Dice Math Trainer</h1>
+
+<!-- ================= SECTION 1 ================= -->
+<div class="section">
+<h2>1️⃣ A + B = C</h2>
+
+<div class="dice">
+<img id="a1"><img id="a2">
+</div>
+
+<input id="ans1" placeholder="A + B">
+<button onclick="check1()">Submit</button>
+
+<p id="r1"></p>
+</div>
+
+<!-- ================= SECTION 2 ================= -->
+<div class="section">
+<h2>2️⃣ (A + B) + C = D</h2>
+
+<div class="dice">
+<img id="b1"><img id="b2"><img id="b3">
+</div>
+
+<input id="ans2" placeholder="(A+B)+C">
+<button onclick="check2()">Submit</button>
+
+<p id="r2"></p>
+</div>
+
+<!-- ================= SECTION 3 ================= -->
+<div class="section">
+<h2>3️⃣ A - B = C (A ≥ B rule)</h2>
+
+<div class="dice">
+<img id="c1"><img id="c2">
+</div>
+
+<input id="ans3" placeholder="A - B">
+<button onclick="check3()">Submit</button>
+
+<p id="r3"></p>
+</div>
+
+<!-- ================= SECTION 4 ================= -->
+<div class="section">
+<h2>4️⃣ (A + B) - C = D</h2>
+
+<div class="dice">
+<img id="d1"><img id="d2"><img id="d3">
+</div>
+
+<input id="ans4" placeholder="(A+B)-C">
+<button onclick="check4()">Submit</button>
+
+<p id="r4"></p>
+</div>
+
+<script>
+
+const diceImg = {
+1:"https://upload.wikimedia.org/wikipedia/commons/1/1b/Dice-1-b.svg",
+2:"https://upload.wikimedia.org/wikipedia/commons/5/5f/Dice-2-b.svg",
+3:"https://upload.wikimedia.org/wikipedia/commons/b/b1/Dice-3-b.svg",
+4:"https://upload.wikimedia.org/wikipedia/commons/f/fd/Dice-4-b.svg",
+5:"https://upload.wikimedia.org/wikipedia/commons/0/08/Dice-5-b.svg",
+6:"https://upload.wikimedia.org/wikipedia/commons/2/26/Dice-6-b.svg"
+};
+
+function rand(){
+    return Math.floor(Math.random()*6)+1;
+}
+
+/* ================= SECTION 1 ================= */
+let a1,a2;
+
+function roll1(){
+    a1=rand(); a2=rand();
+    document.getElementById("a1").src=diceImg[a1];
+    document.getElementById("a2").src=diceImg[a2];
+}
+
+function check1(){
+    let ans=Number(document.getElementById("ans1").value);
+    let correct=a1+a2;
+
+    document.getElementById("r1").innerText =
+        (ans===correct)?"✅ Correct!":"❌ Try again";
+
+    roll1();
+}
+
+/* ================= SECTION 2 ================= */
+let b1,b2,b3;
+
+function roll2(){
+    b1=rand(); b2=rand(); b3=rand();
+
+    document.getElementById("b1").src=diceImg[b1];
+    document.getElementById("b2").src=diceImg[b2];
+    document.getElementById("b3").src=diceImg[b3];
+}
+
+function check2(){
+    let ans=Number(document.getElementById("ans2").value);
+    let correct=(b1+b2)+b3;
+
+    document.getElementById("r2").innerText =
+        (ans===correct)?"✅ Correct!":"❌ Try again";
+
+    roll2();
+}
+
+/* ================= SECTION 3 ================= */
+let c1,c2;
+
+function roll3(){
+    do{
+        c1=rand();
+        c2=rand();
+    }while(c1 < c2); // RULE: A ≥ B
+
+    document.getElementById("c1").src=diceImg[c1];
+    document.getElementById("c2").src=diceImg[c2];
+}
+
+function check3(){
+    let ans=Number(document.getElementById("ans3").value);
+    let correct=c1-c2;
+
+    document.getElementById("r3").innerText =
+        (ans===correct)?"✅ Correct!":"❌ Try again";
+
+    roll3();
+}
+
+/* ================= SECTION 4 ================= */
+let d1,d2,d3;
+
+function roll4(){
+    do{
+        d1=rand();
+        d2=rand();
+        d3=rand();
+    }while((d1+d2)<d3); // RULE: A+B ≥ C
+
+    document.getElementById("d1").src=diceImg[d1];
+    document.getElementById("d2").src=diceImg[d2];
+    document.getElementById("d3").src=diceImg[d3];
+}
+
+function check4(){
+    let ans=Number(document.getElementById("ans4").value);
+    let correct=(d1+d2)-d3;
+
+    document.getElementById("r4").innerText =
+        (ans===correct)?"✅ Correct!":"❌ Try again";
+
+    roll4();
+}
+
+/* INIT */
+roll1();
+roll2();
+roll3();
+roll4();
+
+</script>
+
+</body>
+</html>
